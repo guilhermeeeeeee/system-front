@@ -1,0 +1,47 @@
+.toolbar {
+    height:10%;
+    background-color: #5564ec;
+}
+
+
+.toolBarButton, .drawerButton {
+    padding: 20px;
+}
+
+.container {
+    height: 100%;
+}
+
+.drawer {
+    background-color: #ffffff;
+    width: 15%; 
+}
+
+.burger {
+    color: white;
+}
+
+
+@media all and (max-width: 500px) {
+
+    .toolBarButton {
+        display: none;
+    }
+
+    .toolbar {
+        height:5%;
+    }
+
+    .container {
+        height: 95%;
+    }
+
+}
+
+.flex-end {
+    justify-content: flex-end;   
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
