@@ -1,5 +1,5 @@
 .toolbar {
-    height:10%;
+    height:5%;
     background-color: #5564ec;
 }
 
@@ -35,6 +35,32 @@
     .container {
         height: 95%;
     }
+    .drawer {
+        background-color: #ffffff;
+        width: 50%; 
+    }
+    
+
+}
+
+@media all and (max-width: 900px) {
+
+    .toolBarButton {
+        display: none;
+    }
+
+    .toolbar {
+        height:5%;
+    }
+
+    .container {
+        height: 95%;
+    }
+    .drawer {
+        background-color: #ffffff;
+        width: 50%; 
+    }
+    
 
 }
 

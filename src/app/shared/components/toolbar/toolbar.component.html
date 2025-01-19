@@ -6,7 +6,6 @@
         <mat-icon>menu</mat-icon>
     </button>
     <span class="example-spacer"></span>
-
       <button
         (click)="drawer.toggle()"
         mat-icon-button
@@ -25,7 +24,32 @@ class="container"
           mat-flat-button  
           routerLinkActive="mat-accent" 
           color="primary" 
-          routerLink="home">Lançamentos</button>
+          routerLink="home">Ocorrências</button>
+        </div>
+        <div  class="drawerButton">
+          <button 
+          (click)="drawer.toggle()"
+          [routerLink]="['/customer-list']"
+          mat-flat-button  
+          routerLinkActive="mat-accent" 
+          color="primary" 
+          routerLink="content">Clientes</button>    
+        </div>
+        <div  class="drawerButton">
+          <button 
+          (click)="drawer.toggle()"
+          mat-flat-button  
+          routerLinkActive="mat-accent" 
+          color="primary" 
+          routerLink="content">Asegurados</button>    
+        </div>
+        <div  class="drawerButton">
+          <button 
+          (click)="drawer.toggle()"
+          mat-flat-button  
+          routerLinkActive="mat-accent" 
+          color="primary" 
+          routerLink="content">Colaboradores</button>    
         </div>
         <div  class="drawerButton">
           <button 
