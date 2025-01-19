@@ -1,5 +1,5 @@
 
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -11,11 +11,13 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatCalendarCellClassFunction, MatDatepickerModule} from '@angular/material/datepicker';
 import { ErrorStateMatcher, provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { FormControl, FormGroup, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../models/customer.model';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { emailExistsValidator } from '../../customer/validators/emailExistsValidator.validator';
 
 @Component({
   selector: 'app-customer-detail',
@@ -26,43 +28,27 @@ import { ActivatedRoute, Router } from '@angular/router';
       MatDatepickerModule,MatFormFieldModule,
        MatInputModule, MatSelectModule, MatCardModule,
         MatButtonModule, MatDividerModule, MatIconModule],
-  templateUrl: './customer-detail.component.html',
-  styleUrl: './customer-detail.component.css',
+  templateUrl: './customer-register.component.html',
+  styleUrl: './customer-register.component.css',
   encapsulation: ViewEncapsulation.None,
-  providers: [provideNativeDateAdapter(),provideNgxMask(),],
+  providers: [provideNativeDateAdapter(),provideNgxMask()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class CustomerDetailComponent implements OnInit{
+export class CustomerRegisterComponent {
   
-  constructor(private service: CustomerService, private router:Router,private route: ActivatedRoute) {}
-
-  documentNumberDetail!: string;
-  customerDetail!: Customer;
-  ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      debugger
-      this.documentNumberDetail = params.get('documentNumber')!;
-    });
-    this.service.findByDocumentNumber(this.documentNumberDetail).subscribe(
-      (response) => {
-        debugger
-        this.customerDetail = response;
-        this.formCustomer.patchValue(this.customerDetail);
-        console.log('Data fetched successfully:', this.customerDetail);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
+  constructor(private service: CustomerService, private router:Router) {}
 
   formCustomer = new FormGroup({
     documentNumber: new FormControl('', [Validators.required]),
     corporateName: new FormControl('', [Validators.required]),
     tradeName: new FormControl('', [Validators.required]),
     dateFoundation:new FormControl(''),
-    email:new FormControl('', [Validators.required, Validators.email]),
+    email:new FormControl('', {
+      validators:[Validators.required, Validators.email],
+      asyncValidators: [emailExistsValidator(this.service)]
+    }
+    ),
     phoneNumber:new FormControl('', [Validators.required]),
     address: new FormGroup({
       street:new FormControl('' , [Validators.required]),
@@ -75,6 +61,7 @@ export class CustomerDetailComponent implements OnInit{
   });
   customerRequest!: Customer;
   matcher = new MyErrorStateMatcher();
+  
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     // Only highligh dates inside the month view.
     if (view === 'month') {
@@ -87,7 +74,8 @@ export class CustomerDetailComponent implements OnInit{
     return '';
   };
   save() {
-    this.service.update(this.createCustomerFromForm()).subscribe({
+    debugger
+    this.service.save(this.createCustomerFromForm()).subscribe({
       next: (response) => {
         console.log('Item salvo com sucesso', response);
         this.router.navigate(['/customer-list']);
@@ -101,7 +89,7 @@ export class CustomerDetailComponent implements OnInit{
     // this.router.navigate(['/customer-list']);
     
     console.log(this.formCustomer)
-  } 
+  }
 
   safeString(value: string | null | undefined): string {
     return value ?? ''; // Retorna uma string vazia caso o valor seja null ou undefined
@@ -139,5 +127,3 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
-
-

@@ -32,6 +32,9 @@
             @if (formCustomer.controls.email.hasError('required')) {
               <mat-error>Email is <strong>required</strong></mat-error>
             }
+            @if (formCustomer.controls.email.hasError('emailTaken')) {
+              <mat-error>Email já<strong> cadastrado</strong></mat-error>
+            }
           </mat-form-field>
       </div>
         <div>
@@ -52,7 +55,7 @@
         <div>
           <mat-form-field class="example-full-width" style="margin-left: 2%;">
             <mat-label>Telephone</mat-label>
-            <input type="tel" matInput mask="(00) 00000-0000" placeholder="(00) 0000-0000" [formControl]="formCustomer.controls.phoneNumber">
+            <input [formControl]="formCustomer.controls.phoneNumber" type="tel" matInput mask="(00) 00000-0000" placeholder="(00) 0000-0000">
             <mat-icon matSuffix>phone</mat-icon>
           </mat-form-field>
       </div>
@@ -60,31 +63,31 @@
           <h1  style="margin-top: 2%; margin-left: 2%;">ENDEREÇO</h1>
         </div>
         <div>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Rua</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.street">
-          </mat-form-field>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Número</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.number">
-          </mat-form-field>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Cidade</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.city">
-          </mat-form-field>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Estado</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.state">
-          </mat-form-field>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Bairro</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.neighborhood">
-          </mat-form-field>
-          <mat-form-field style="margin-left: 2%;">
-            <mat-label>Cep</mat-label>
-            <input matInput [formControl]="formCustomer.controls.address.controls.zipcode">
-          </mat-form-field>
-        </div>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Rua</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.street">
+            </mat-form-field>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Número</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.number">
+            </mat-form-field>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Cidade</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.city">
+            </mat-form-field>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Estado</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.state">
+            </mat-form-field>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Bairro</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.neighborhood">
+            </mat-form-field>
+            <mat-form-field style="margin-left: 2%;">
+              <mat-label>Cep</mat-label>
+              <input matInput [formControl]="formCustomer.controls.address.controls.zipcode">
+            </mat-form-field>
+          </div>
         <section>
             <div class="example-button-row"  style="margin-left: 2%;">
               <div class="example-flex-container">
