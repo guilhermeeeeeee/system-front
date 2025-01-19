@@ -1,7 +1,7 @@
 
 <div style="margin-top: 4%;"></div>
 <div>
-  <h1  style="margin-left: 2%;">CADASTRO DE CLIENTE</h1>
+  <h1 style="margin-left: 2%;">CADASTRO DE CLIENTE</h1>
 </div>
 <mat-card appearance="outlined">
     <mat-card-content>
@@ -10,56 +10,79 @@
             <mat-form-field style="margin-left: 2%;">
                 <mat-label>Razão Social</mat-label>
                 <input matInput [formControl]="formCustomer.controls.corporateName">
+                <mat-icon matSuffix>label</mat-icon>
               </mat-form-field>
         </div>
         <div>
             <mat-form-field style="margin-left: 2%;">
                 <mat-label>CNPJ</mat-label>
                 <input matInput mask="000.000.000-00"  [formControl]="formCustomer.controls.documentNumber">
+                <mat-icon matSuffix>badge</mat-icon>
               </mat-form-field>
         </div>
         <div>
-            <mat-form-field style="margin-left: 2%;">
-                <mat-label>Nome Fantasia</mat-label>
-                <input matInput  [formControl]="formCustomer.controls.tradeName">
-              </mat-form-field>
+          <mat-form-field class="example-full-width" style="margin-left: 2%;">
+            <mat-label >Email</mat-label>
+            <input type="email" matInput [formControl]="formCustomer.controls.emailFormControl" [errorStateMatcher]="matcher"
+                   placeholder="Ex. pat@example.com">
+                   <mat-icon matSuffix>email</mat-icon>
+            @if (formCustomer.controls.emailFormControl.hasError('email') && !formCustomer.controls.emailFormControl.hasError('required')) {
+              <mat-error>Please enter a valid email address</mat-error>
+            }
+            @if (formCustomer.controls.emailFormControl.hasError('required')) {
+              <mat-error>Email is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+      </div>
+        <div>
+          <mat-form-field style="margin-left: 2%;">
+            <mat-label>Nome Fantasia</mat-label>
+            <input matInput [formControl]="formCustomer.controls.tradeName">
+            <mat-icon matSuffix>label</mat-icon>
+          </mat-form-field>
         </div>
         <div style="margin-left: 2%;">
           <mat-form-field class="example-full-width">
-            <mat-label>Choose a date</mat-label>
+            <mat-label>Data Fundação</mat-label>
             <input matInput [matDatepicker]="picker">
-            <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>
           </mat-form-field>
         </div>
+        <div>
+          <mat-form-field class="example-full-width" style="margin-left: 2%;">
+            <mat-label>Telephone</mat-label>
+            <input type="tel" matInput mask="(00) 00000-0000" placeholder="(00) 0000-0000">
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+      </div>
         <div>
           <h1  style="margin-top: 2%; margin-left: 2%;">ENDEREÇO</h1>
         </div>
         <div>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Rua</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.street">
           </mat-form-field>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Número</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.number">
           </mat-form-field>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Cidade</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.city">
           </mat-form-field>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Estado</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.state">
           </mat-form-field>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Bairro</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.neighborhood">
           </mat-form-field>
           <mat-form-field style="margin-left: 2%;">
             <mat-label>Cep</mat-label>
-            <input matInput>
+            <input matInput [formControl]="formCustomer.controls.address.controls.zipcode">
           </mat-form-field>
         </div>
         <section>
@@ -70,7 +93,7 @@
                     <mat-icon>save</mat-icon>
                     Salvar
                   </button>
-                  <button mat-fab extended color="primary" style="margin-left: 1%;">
+                  <button mat-fab extended color="primary" style="margin-left: 1%;" (click)="cancel()">
                     <mat-icon>cancel</mat-icon>
                     Cancelar
                   </button>
