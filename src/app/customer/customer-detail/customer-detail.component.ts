@@ -98,7 +98,7 @@ export class CustomerDetailComponent implements OnInit{
     });
   }
   cancel(){
-    // this.router.navigate(['/customer-list']);
+    this.router.navigate(['/customer-list']);
     
     console.log(this.formCustomer)
   } 

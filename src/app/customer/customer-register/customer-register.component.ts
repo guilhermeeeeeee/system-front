@@ -86,7 +86,7 @@ export class CustomerRegisterComponent {
     });
   }
   cancel(){
-    // this.router.navigate(['/customer-list']);
+    this.router.navigate(['/customer-list']);
     
     console.log(this.formCustomer)
   }
