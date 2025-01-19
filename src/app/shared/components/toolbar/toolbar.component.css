@@ -16,6 +16,13 @@
     background-color: #ffffff;
     width: 15%; 
 }
+.centralizarImagem { 
+    display:         flex;
+    display: -webkit-flex; /* Garante compatibilidade com navegador Safari. */
+
+    justify-content: center;
+    align-items: center;
+}
 
 .burger {
     color: white;
