@@ -7,20 +7,19 @@ import {MatMenuModule} from '@angular/material/menu';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink} from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../models/customer.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ModalConfirmActionComponent } from '../../shared/modal-confirm-action/modal-confirm-action.component';
-import { MatDialog, MatDialogActions, MatDialogClose, MatDialogConfig, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { MatDialog} from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 @Component({
   selector: 'app-customer-list',
   standalone: true,
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css',
-  providers: [provideNativeDateAdapter(),provideNgxMask()],
+  providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.Default,
   animations: [
     trigger('detailExpand', [
@@ -29,12 +28,10 @@ import { provideNativeDateAdapter } from '@angular/material/core';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  imports: [MatPaginatorModule,MatTableModule,NgxMaskDirective,
+  imports: [MatPaginatorModule,MatTableModule,
      MatButtonModule, MatIconModule,
       MatMenuModule, MatFormFieldModule,
-       FormsModule, MatInputModule,
-        RouterOutlet, RouterLink,
-         RouterLinkActive,MatButtonModule],
+       FormsModule, MatInputModule, RouterLink,MatButtonModule],
 })
 
 export class CustomerListComponent implements OnInit {
@@ -51,17 +48,6 @@ export class CustomerListComponent implements OnInit {
   pageSize: number = 10;
   currentPage: number = 0;
   
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, documentNumber: string): void {
-    this.documentNumberToDelete = documentNumber;
-    const dialogRef = this.dialog.open(ModalConfirmActionComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == true) {
-        this.deleteConfirm()
-      } else {
-        this.deleteCancel()
-      }
-    }); 
-  }
   ngOnInit(): void {
     this.findAllPaginated(this.currentPage, this.pageSize)
   }
@@ -71,9 +57,9 @@ export class CustomerListComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex;   // A nova página (base 0)
-    this.pageSize = event.pageSize;       // O novo tamanho da página
-    this.findAllPaginated(this.currentPage, this.pageSize);  // Recarrega os dados com a nova página e tamanho
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.findAllPaginated(this.currentPage, this.pageSize);
   }
 
   findAllPaginated(page: number, size: number){
@@ -102,6 +88,18 @@ export class CustomerListComponent implements OnInit {
   deleteCancel(){
     this.documentNumberToDelete = '';
   }
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, documentNumber: string): void {
+    this.documentNumberToDelete = documentNumber;
+    const dialogRef = this.dialog.open(ModalConfirmActionComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.deleteConfirm()
+      } else {
+        this.deleteCancel()
+      }
+    }); 
+  }
+  
   
   
 

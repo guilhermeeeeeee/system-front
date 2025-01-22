@@ -14,7 +14,6 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { FormControl, FormGroup, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../models/customer.model';
-import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -29,34 +28,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.css',
   encapsulation: ViewEncapsulation.None,
-  providers: [provideNativeDateAdapter(),provideNgxMask(),],
+  providers: [provideNativeDateAdapter(),provideNgxMask()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class CustomerDetailComponent implements OnInit{
   
   constructor(private service: CustomerService, private router:Router,private route: ActivatedRoute) {}
-
-  documentNumberDetail!: string;
-  customerDetail!: Customer;
-  ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      debugger
-      this.documentNumberDetail = params.get('documentNumber')!;
-    });
-    this.service.findByDocumentNumber(this.documentNumberDetail).subscribe(
-      (response) => {
-        debugger
-        this.customerDetail = response;
-        this.formCustomer.patchValue(this.customerDetail);
-        console.log('Data fetched successfully:', this.customerDetail);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
-
   formCustomer = new FormGroup({
     documentNumber: new FormControl('', [Validators.required]),
     corporateName: new FormControl('', [Validators.required]),
@@ -75,17 +53,42 @@ export class CustomerDetailComponent implements OnInit{
   });
   customerRequest!: Customer;
   matcher = new MyErrorStateMatcher();
+  documentNumberDetail!: string;
+  customerDetail!: Customer;
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      debugger
+      this.documentNumberDetail = params.get('documentNumber')!;
+    });
+    this.findByDocumentNumber();
+  }
+
+  
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    // Only highligh dates inside the month view.
+
     if (view === 'month') {
       const date = cellDate.getDate();
 
-      // Highlight the 1st and 20th day of each month.
       return date === 1 || date === 20 ? 'example-custom-date-class' : '';
     }
 
     return '';
   };
+  findByDocumentNumber(){
+    this.service.findByDocumentNumber(this.documentNumberDetail).subscribe(
+      (response) => {
+        debugger
+        this.customerDetail = response;
+        this.formCustomer.patchValue(this.customerDetail);
+        console.log('Data fetched successfully:', this.customerDetail);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  
   save() {
     this.service.update(this.createCustomerFromForm()).subscribe({
       next: (response) => {
@@ -104,14 +107,11 @@ export class CustomerDetailComponent implements OnInit{
   } 
 
   safeString(value: string | null | undefined): string {
-    return value ?? ''; // Retorna uma string vazia caso o valor seja null ou undefined
+    return value ?? '';
   }
-
-  // Função para obter os dados do formulário e criar a instância de Customer
   createCustomerFromForm(): Customer {
-    const formValues = this.formCustomer.value; // Pega todos os valores do formulário
+    const formValues = this.formCustomer.value;
 
-    // Cria uma instância de Customer a partir dos valores do formulário
     const customer: Customer = {
       documentNumber: this.safeString(formValues.documentNumber),
       corporateName: this.safeString(formValues.corporateName),

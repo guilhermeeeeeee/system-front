@@ -11,12 +11,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatCalendarCellClassFunction, MatDatepickerModule} from '@angular/material/datepicker';
 import { ErrorStateMatcher, provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../models/customer.model';
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
 import { emailExistsValidator } from '../../customer/validators/emailExistsValidator.validator';
 
 @Component({
@@ -63,16 +61,16 @@ export class CustomerRegisterComponent {
   matcher = new MyErrorStateMatcher();
   
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    // Only highligh dates inside the month view.
+
     if (view === 'month') {
       const date = cellDate.getDate();
 
-      // Highlight the 1st and 20th day of each month.
       return date === 1 || date === 20 ? 'example-custom-date-class' : '';
     }
 
     return '';
   };
+
   save() {
     debugger
     this.service.save(this.createCustomerFromForm()).subscribe({
@@ -85,6 +83,7 @@ export class CustomerRegisterComponent {
       }
     });
   }
+  
   cancel(){
     this.router.navigate(['/customer-list']);
     
@@ -92,14 +91,11 @@ export class CustomerRegisterComponent {
   }
 
   safeString(value: string | null | undefined): string {
-    return value ?? ''; // Retorna uma string vazia caso o valor seja null ou undefined
+    return value ?? '';
   }
 
-  // Função para obter os dados do formulário e criar a instância de Customer
   createCustomerFromForm(): Customer {
-    const formValues = this.formCustomer.value; // Pega todos os valores do formulário
-
-    // Cria uma instância de Customer a partir dos valores do formulário
+    const formValues = this.formCustomer.value;
     const customer: Customer = {
       documentNumber: this.safeString(formValues.documentNumber),
       corporateName: this.safeString(formValues.corporateName),
